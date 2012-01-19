@@ -3,7 +3,7 @@ $fs = 0.1;
 
 aluminum = [0.9, 0.9, 0.9];
 polycarbonate = [0.3, 0.3, 0.3];
-brass = [0.6, 0.4, 0];
+brass = [0.8, 0.7, 0];
 
 module pulley(bore_diameter, outside_diameter, width,
 			  flange_diameter, flange_width,
