@@ -47,6 +47,10 @@ module linearclip() {
 	}
 }
 
+support_radius = 30;
+support_x = 26.5;
+jaw_x = 18;
+
 // Carriage body
 color([0, 1, 0])
 difference() {
@@ -68,18 +72,43 @@ difference() {
 		translate([idler_x, -4.5, idler_z]) rotate([90, 0, 0])
 			cylinder(h=3, r1=4.5, r2=7.5, center=true);
 
-		// Extruder barrel (the case around the hobbed bolt)
-		translate([0, -20, 0]) rotate([90, 0, 0])
-		    cylinder(r=12, h=30, center=true);
-		translate([-2.1, -20, 6.4]) rotate([0, 45, 0])
-			cube([12, 30, 30], center=true);
-		translate([-25, -20, 0]) cube([25, 30, 5], center=true);
+		intersection() {
+			union() {
+				// Extruder barrel (the case around the hobbed bolt)
+				translate([0, -20, 0]) rotate([90])
+					cylinder(r=12, h=30, center=true);
+
+				// Barrel support
+				difference() {
+					translate([-22.5, -20, 0]) cube([30, 30, 30], center=true);
+					translate([-support_x, -20, support_radius+2.5])
+						rotate([90])
+						cylinder(r=support_radius, h=50, center=true);
+					translate([-support_x, -20, -support_radius-2.5])
+						rotate([90])
+						cylinder(r=support_radius, h=50, center=true);
+					translate([-2*support_x, -20, -7.5])
+						cube([2*support_x, 20, 10], center=true);
+					translate([-2*support_x, -20, 7.5])
+						cube([2*support_x, 20, 10], center=true);
+				}
+			}
+			translate([0, 30, 0]) cylinder(r=65, h=100, center=true);
+		}
 
 		// Groovemount holder
-		translate([hotend_x, -20, -14]) cube([20, 30, 10], center=true);
+		intersection() {
+			union() {
+				translate([0, -18, -20]) cube([75, 20, 5], center=true);
+				translate([jaw_x, -20, -22]) rotate([90])
+					cylinder(r=10, h=6, center=true);
+			}
+			translate([0, 38, 0]) cylinder(r=65, h=45, center=true);
+		}
 	}
 	// Hobbed bolt hole
-	translate([0, -20, 0]) rotate([90, 0, 0]) cylinder(h=40, r=7, center=true);
+	translate([0, -20, 0]) rotate([90, 0, 0])
+		cylinder(h=40, r=7, center=true);
 
 	// Hobbed bolt bearing holders
 	translate([0, -7, 0]) rotate([90, 0, 0])
@@ -104,23 +133,26 @@ difference() {
 	translate([linear_x, 0, 24]) cube([6, 30, 2], center=true);
 
 	// Extruder mouth
-	translate([21, -25, 6]) cube([30, 30, 30], center=true);
-	translate([12, -20, -4]) rotate([90, 0, 0])
-		cylinder(r=14, h=10, center=true);
-	translate([hotend_x, -20, 10]) cylinder(r=1.5, h=20, center=true);
+	translate([0, -20, -2]) cylinder(r=7, h=20, center=true);
+	translate([10, -20, -2]) cube([20, 14, 20], center=true);
+	translate([10, -20, 0]) cube([20, 19, 8], center=true);
+	translate([10, -25, 0]) cube([6, 30, 20], center=true);
 
-	// Front left bevel
-	translate([-37.5, -45.36, 0]) rotate([0, 0, 45])
-	    cube([50, 50, 50], center=true);
+	// Filament hole and funnels
+	translate([hotend_x, -20, 0]) cylinder(r=1, h=80, center=true);
+	translate([hotend_x, -20, 11]) cylinder(r1=1, r2=5, h=5, center=true);
+    translate([hotend_x, -20, -19]) cylinder(r1=1, r2=5, h=5, center=true);
 
 	// Jaw tensioner
-    translate([0, -25, 22]) cube([20, 30, 10], center=true);
-	translate([-5, -14, 17]) cube([10, 8, 13], center=true);
-	translate([-5, -26, 17]) cube([10, 8, 13], center=true);
-	translate([2, -14, 14]) rotate([0, 90, 0])
-		cylinder(r=1, h=20, center=true);
-	translate([2, -26, 14]) rotate([0, 90, 0])
-		cylinder(r=1, h=20, center=true);
+	translate([0, -25, 22]) cube([20, 30, 10], center=true);
+
+	// Jaw tensioner hinge screw hole
+	translate([jaw_x, -20, -15]) rotate([90])
+		cylinder(r=1.5, h=60, center=true);
+	translate([jaw_x, -13.5, -15]) rotate([90])
+		cylinder(r=5, h=7, center=true);
+	translate([jaw_x, -26.5, -15]) rotate([90])
+		cylinder(r=5, h=7, center=true);
 }
 
 // Linear bearings
@@ -160,6 +192,8 @@ module groovemount() {
 }
 
 // Hotend
-% translate([hotend_x, -20, -24]) groovemount();
+translate([hotend_x, -20, -36]) groovemount();
+
+// Red filament
 translate([hotend_x, -20, 0]) color([1, 0, 0])
-	cylinder(r=1.75/2, h=60, center=true);
+	cylinder(r=1.75/2, h=100, center=true);
