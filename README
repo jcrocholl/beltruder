@@ -1,0 +1,22 @@
+http://reprap.org/wiki/Beltruder
+
+http://www.thingiverse.com/thing:15132
+
+Early concept for a symmetric belt-driven extruder carriage for
+upgrading Prusa Mendel. Belt-driven means there's no stepper motor on
+the X-carriage, so it can be much lighter and move much faster.
+
+It has two X-belts that are controlled by one stepper on each side.
+
+If both belts move in the same direction, the X-carriage moves in that
+direction too. If both belts move in opposite directions, the extruder
+moves but the X-carriage stands still.
+
+x_motion = (stepper1 + stepper2) / 2
+extruder = (stepper1 - stepper2) / 2
+
+We'll need new firmware to control x_motion and extruder independently
+by setting the correct speed for each stepper motor for the two belts.
+
+stepper1 = x_motion + extruder
+stepper2 = x_motion - extruder
