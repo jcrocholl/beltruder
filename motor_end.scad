@@ -1,3 +1,4 @@
+use <pulley.scad>;
 use <x_carriage.scad>;
 use <timing_belt.scad>;
 
@@ -89,7 +90,7 @@ module nema17(length) {
 		color(steel) translate([motor_screw, -11.8, motor_screw])
 			rotate([90, 0, 0]) cylinder(r=5, h=0.5, center=true);
 	}
-	rotate([180, 0, 0]) pulley(5, 16, 7, 18, 1);
+	rotate([270, 0, 0]) narrow_pulley(5, 9.7, 7, 15, 1, 14.7, 14.3);
 }
 
 // Stepper motors

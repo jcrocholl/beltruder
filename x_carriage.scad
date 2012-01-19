@@ -1,3 +1,5 @@
+use <pulley.scad>;
+
 $fa = 3;   // Minimum angle for circle segments.
 $fs = 0.5; // Minimum size for circle segments.
 
@@ -24,28 +26,6 @@ module bearing(id, od, w) {
 		cylinder(h=w, r=od/2, center=true);
 		cylinder(h=w*2, r=id/2, center=true);
 	}
-}
-
-module pulley(id, od, w, fd, fw) {
-	color([0.2, 0.2, 0.2])
-	rotate([90, 0, 0])
-	union() {
-		difference() {
-			union() {
-				cylinder(h=fw+w+fw, r=od/2, center=true);
-				translate([0, 0, (w+fw)/2])
-					cylinder(h=fw, r=od/2+2, center=true);
-				translate([0, 0, -(w+fw)/2])
-					cylinder(h=fw, r=od/2+2, center=true);
-			}
-			translate([0, 0, -0.3*w]) cylinder(h=w, r=od/3, center=true);
-		}
-		translate([0, 0, -w/2]) cylinder(h=2*w, r=od/5, center=true);
-	}
-	// Aluminum insert
-	color(aluminum)
-	rotate([90, 0, 0])
-	translate([0, 0, -w/2]) cylinder(h=2.3*w, r=od/7, center=true);
 }
 
 module linearclip() {
@@ -150,7 +130,7 @@ translate([linear_x, 0, 35]) rotate([0, 90, 0]) lm8uu();
 translate([linear_x, 0, -35]) rotate([0, 90, 0]) lm8uu();
 
 // Timing belt pulley
-translate([0, 0, 0]) pulley(6, 38.8, 7, 42, 1);
+translate([0, 0, 0]) rotate([270]) pulley(6, 38.8, 7, 42, 1, 14, 14);
 
 // Timing belt bearings
 translate([-idler_x, 0, -idler_z]) bearing(6, 17, 6);
